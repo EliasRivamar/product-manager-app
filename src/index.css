@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* ✨ Tu tema personalizado */
+@theme {
+  /* 🎨 Colores Global */
+  --color-primary: #007AFF;
+  --color-success: #34C759;
+  --color-danger: #FF3B30;
+
+  /* 🎨 Colores Light Theme */
+  --color-background-light: #F2F2F7;
+  --color-text-primary-light: #1D1D1F;
+  --color-text-secondary-light: #6E6E73;
+  --color-bor-light: #E5E5EA;
+  --color-surface-light: #FFFFFF;
+
+  /* 🎨 Colores Dark Theme */
+  --color-background-dark: #101922;
+  --color-text-primary-dark: #F5F5F7;
+  --color-text-secondary-dark: #8A8A8E;
+  --color-bor-dark: #3A3A3C;
+  --color-surface-dark: #1C1C1E;
+
+  /* 🖋️ Tipografía */
+  --font-display: "Inter", sans-serif;
+
+  /* 🟣 Bordes */
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+}
