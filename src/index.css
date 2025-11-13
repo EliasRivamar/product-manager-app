@@ -30,3 +30,51 @@
   --radius-xl: 1rem;
   --radius-full: 9999px;
 }
+
+/* Scrollbar general */
+::-webkit-scrollbar {
+  width: 8px;              /* grosor del scroll vertical */
+  height: 8px;             /* grosor del scroll horizontal */
+}
+
+
+::-webkit-scrollbar-track {
+  background: transparent;  
+}
+
+/* "thumb" — la parte que se mueve */
+::-webkit-scrollbar-thumb {
+  background-color: rgb(156 163 175);
+  border-radius: 9999px;             
+  border: 2px solid transparent;     
+  background-clip: content-box;
+}
+
+/* Hover del thumb */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128); /* gray-500 */
+}
+
+/* Dark mode*/
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99); /* gray-600 */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(156 163 175); /* gray-400 */
+}
+
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.5);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(107, 114, 128, 0.7);
+}
+

@@ -1,73 +1,48 @@
-# React + TypeScript + Vite
+# Product-Manager – Control de productos, ventas y analíticas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Product Manager** es una aplicación web desarrollada con **Vite**, **React** y **TypeScript**, pensada para la gestión de comercios locales.  
+Permite controlar productos, manejar carritos, registrar ventas y visualizar analíticas, con la posibilidad futura de convertirse en una **app de escritorio offline**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Objetivo del proyecto
+Crear una plataforma simple y eficiente para negocios locales que necesiten:
+- Controlar inventario y precios.
+- Registrar ventas y movimientos.
+- Consultar estadísticas de rendimiento.
+- Poder usar el sistema sin depender de una conexión constante a Internet.
 
-## React Compiler
+---
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## 🧩 Tecnologías principales
+- **Vite** – Framework React con soporte para SSR y API Routes.  
+- **React + TypeScript** – Interfaz moderna, segura y escalable.  
+- **Tailwind CSS** – Estilos rápidos y personalizables.  
+- **SQLite / IndexedDB** – Almacenamiento local (modo offline).  
+- *(Futuro)* **Tauri o Electron** – Empaquetado como aplicación de escritorio.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ⚙️ Funcionalidades (en desarrollo)
+- [ ] Sistema de productos (crear, editar, eliminar).  
+- [ ] Carrito de compras local.  
+- [ ] Registro de ventas.  
+- [ ] Dashboard de analíticas.  
+- [ ] Soporte para modo offline.  
+- [ ] Sincronización opcional con servidor remoto.  
+- [ ] Versión de escritorio (Tauri / Electron).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      // Alternatively, use this for stricter rules
-      tseslint.configs.recommendedTypeChecked,
-      tseslint.configs.strictTypeChecked,
-      tseslint.configs.stylisticTypeChecked,
-      // Optionally, add this for stylistic rules
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🧱 Estructura inicial del proyecto
+```bash
+/localcommerce
+ ├── /src
+ │   ├── /app
+ │   ├── /components
+ │   ├── /lib
+ │   ├── /types
+ │   └── /styles
+ ├── package.json
+ ├── tsconfig.json
+ └── README.md

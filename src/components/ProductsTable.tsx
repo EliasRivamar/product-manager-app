@@ -1,14 +1,6 @@
 import { useEffect, useState } from "react"
 import Papa from 'papaparse'
-
-interface Producto {
-  name: string,
-  key: string,
-  stock: number,
-  "Precio ($)": number,
-  category: string,
-}
-
+import { type Producto } from "../types/types"
 
 export function ProductsTable() {
   const [productos, setProductos] = useState<Producto[]>([])
@@ -16,6 +8,8 @@ export function ProductsTable() {
     Papa.parse("/productos.csv", {
       download: true,
       header: true,
+      skipEmptyLines: true,
+      dynamicTyping: true,
       complete: (result) => {
         setProductos(result.data as Producto[])
       },
@@ -23,25 +17,31 @@ export function ProductsTable() {
   }, [])
   console.log(productos)
   return (
-    <table className="min-w-[60%]">
-      <thead className="bg-surface-light dark:bg-surface-dark">
-        <tr>
-          <th>Nombre</th>
-          <th>Stock</th>
-          <th>Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          productos.map( producto => (
-            <tr key={producto.key} className="hover:bg-surface-light/50">
-                <td className="p-2 border-b border-border-light">{producto.name}</td>
-                <td className="p-2 border-b border-border-light">{producto.category}</td>
-                <td className="p-2 border-b border-border-light">{producto.stock}</td>
-                <td className="p-2 border-b border-border-light">{producto["Precio ($)"]}</td>
-              </tr>
-            ))}
-      </tbody>
-    </table>
+    <div className=" min-w-[60%] rounded-xl border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark max-h-[600px] overflow-y-auto">
+      <table className="w-full">
+        <thead className="bg-surface-light dark:bg-surface-dark">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider" scope="col">Nombre</th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider" scope="col">Stock</th>
+            <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary-light dark:text-text-secondary-dark uppercase tracking-wider" scope="col">Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            productos.map( producto => (
+              <tr key={producto.key} className="border-t border-border-light dark:border-border-dark hover:bg-background-light dark:hover:bg-background-dark">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{producto.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-2">
+                    <span className={`h-2 w-2 rounded-full ${producto.stock === 0 ? 'bg-danger' : 'bg-success'}`}></span>
+                    <span>{producto.stock} unidades</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary-light dark:text-text-secondary-dark">{producto.price}</td>
+                </tr>
+              ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
