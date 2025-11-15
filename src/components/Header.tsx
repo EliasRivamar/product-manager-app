@@ -21,7 +21,7 @@ export function Header () {
             <a className="flex items-center gap-3 px-3 py-2 rounded text-text-secondary-light dark:text-text-secondary-dark hover:bg-primary/10 hover:text-primary hover:scale-105 duration-300" href="#">
               <p className="text-sm font-medium">Configuración</p>
             </a>
-            <a className="flex items-center gap-3 px-3 py-2 rounded bg-danger/10 text-danger  dark:text-text-secondary-dark hover:bg-danger/50 hover:text-danger hover:scale-105 duration-300" href="#">
+            <a className="flex items-center gap-3 px-3 py-2 rounded bg-danger/10 text-danger   hover:bg-danger/50 hover:text-danger hover:scale-105 duration-300" href="#">
               <p className="text-sm font-medium">Salir</p>
             </a>
             </nav>

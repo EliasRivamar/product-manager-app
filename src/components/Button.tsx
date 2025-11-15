@@ -1,6 +1,8 @@
-export function Button ({children}) {
+import type { ReactNode } from "react";
+
+export function Button ({children, onClick}: { children: ReactNode; onClick?: () => void }) {
   return (
-    <button 
+    <button onClick={onClick}
     className="bg-primary rounded-lg text-text-primary-dark hover:bg-[#0165d1] text-sm hover:scale-105 duration-300
     py-2 px-3 cursor-pointer"
     >

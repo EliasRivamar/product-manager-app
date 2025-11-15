@@ -1,4 +1,4 @@
-﻿key,name,category,stock,price
+﻿id,name,category,stock,price
 b1115ca5-38be-44f5-8be5-30ec7d629550,Manzanas Fuji,Frutas,120,2500
 9f64af14-779e-401d-a636-e44151036ebe,Bananas,Frutas,200,1800
 980a3ab5-aefa-4593-85b7-7bd87eb59f6a,Peras Williams,Frutas,90,2700
