@@ -11,7 +11,7 @@ export function Filters() {
   }
   
   return (
-    <div className='min-w-[20%] flex flex-col gap-6 p-6 bg-surface-light dark:bg-surface-dark rounded-xl border border-bor-light dark:border-bor-dark max-h-[540px]'>
+    <div className='min-w-[15%] flex flex-col gap-6 p-6 bg-surface-light dark:bg-surface-dark rounded-xl border border-bor-light dark:border-bor-dark max-h-[540px]'>
       <h2 className="text-lg font-bold">Filtros</h2>
       <div>
         <h3 className='font-semibold text-sm mb-3'>Estado</h3>

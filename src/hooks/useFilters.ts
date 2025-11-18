@@ -11,14 +11,11 @@ export const useFilters = (products: Producto[] = []) => {
   const { filters, setFilters } = context
 
   const filteredProducts = useMemo(() => {
-    console.log("Filtrando productos...")
-
     return products.filter((product) => {
       if (filters.stock === 'all') return true
       if (filters.stock === 'yes-stock') return product.stock > 0
       if (filters.stock === 'no-stock') return product.stock === 0
     })
-
   }, [products, filters])
 
   return { filters, filteredProducts, setFilters }

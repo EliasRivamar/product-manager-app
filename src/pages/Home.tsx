@@ -3,21 +3,24 @@ import { Filters } from "../components/Filters";
 import { ProductsTable } from "../components/ProductsTable";
 import { Cart } from "../components/Cart";
 import { SearchBar } from "../components/SearchBar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Papa from 'papaparse'
 import type { Producto } from "../types/types";
 import { useFilters } from "../hooks/useFilters";
+import debounce from "just-debounce-it";
 
 
 export function Home() {
   const [productos, setProductos] = useState<Producto[]>([])
   const [searchValue, setSearchValue] = useState('')
-  const { filteredProducts} = useFilters(productos)
+  const { filteredProducts } = useFilters(productos)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchValue(value)
   }
+
+  // TODO: DEBOUNCE AL BUSCAR
 
   useEffect(() => {
     Papa.parse("/productos.csv", {
@@ -42,7 +45,7 @@ export function Home() {
     <div className='font-display bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark'>
       <div className="flex flex-col h-screen w-full">
         <Header />
-        <main className="grid grid-rows-[100px, 1fr ] grid-cols-[240px_minmax(700px,1fr)_250px] gap-4 px-4 w-full place-content-center">
+        <main className="grid grid-rows-[100px, 1fr ] grid-cols-[200px_minmax(700px,1fr)_320px] gap-4 px-4 w-full place-content-center">
           <div className="flex row-start-1 row-end-1 col-start-2 col-end-3 justify-center">
             <SearchBar onChange={handleChange}></SearchBar>
           </div>

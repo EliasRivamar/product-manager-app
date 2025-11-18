@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react"
-
 import { type Producto } from "../types/types"
-import { Button } from "./Button"
 import { useCart } from "../hooks/useCart"
+import { AddToCartIcon } from "../icons/AddCart"
 
 export function ProductsTable({productos}:{productos: Producto[]}) {
-  const {addToCart} = useCart()
+  const {cart, addToCart} = useCart()
   return (
     <div className=" min-w-[60%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[530px] overflow-y-auto">
       <table className="w-full">
@@ -32,7 +30,12 @@ export function ProductsTable({productos}:{productos: Producto[]}) {
                 </td>
                 <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${producto.price}</td>
                 <td className="px-4 py-2">
-                  <Button onClick={() => addToCart(producto)}>Añadir</Button>
+                  <button
+                  disabled={producto.stock === 0 || cart.some(item => item.producto.id === producto.id)}
+                  className={`bg-primary/20 rounded-lg text-text-primary-dark hover:bg-primary/30 text-sm hover:scale-105 duration-300 py-2 px-3 ${producto.stock === 0 || cart.some(item => item.producto.id === producto.id) ? 'opacity-10' :'opacity-100 cursor-pointer'}`}
+                  onClick={() => addToCart(producto)}>
+                    <span><AddToCartIcon/></span>
+                  </button>
                 </td>
               </tr>
             )})}
