@@ -1,7 +1,7 @@
 import CirclePlus from '../assets/plus.svg?react'
 
-export function AddToCartIcon () {
+export function AddToCartIcon ({className = 'stroke-primary'}:{className: string}) {
   return (
-    <CirclePlus className="stroke-primary"/>
+    <CirclePlus className={className}/>
   )
 }

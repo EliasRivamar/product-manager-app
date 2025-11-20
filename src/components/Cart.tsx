@@ -5,11 +5,14 @@ import { Button } from "./Button"
 import { QuantityInput } from "./QuantityInput"
 import { productRepository } from "../db/productRepository"
 import type { Producto } from "../types/types"
+import { useToast } from "../context/toast"
 
 
 export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedPanel: "products" | "cart", setFocusedPanel: (panel: "products" | "cart") => void, setProductos: (p: Producto[]) => void}) {
   const { cart, clearCart, addToCart, removeFromCart, restQuantity } = useCart()
   const [selectedIndex, setSelectedIndex] = useState(0)
+    const { showToast } = useToast()
+  
 
   const total = cart.reduce(
     (acc, item) => acc + item.producto.price * item.quantity,
@@ -94,6 +97,7 @@ export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedP
       const nuevos = await productRepository.getAll()
       setProductos(nuevos)
       clearCart()
+      showToast('Compra realizada con exito. Stock actualizado.', 'success')
     })
 
 

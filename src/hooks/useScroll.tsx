@@ -11,6 +11,7 @@ export const useScroll = ({
   setProductToDelete,
   productToEdit,
   productToDelete,
+  addProduct
 }: {
   productos: Producto[]
   focusedPanel: 'products' | 'productsControl' | 'cart'
@@ -21,6 +22,7 @@ export const useScroll = ({
   setProductToDelete: (p: Producto) => void
   productToEdit: Producto | null
   productToDelete: Producto | null
+  addProduct: boolean
 }) => {
   const rowRefs = useRef<(HTMLTableRowElement | undefined)[]>([])
   const containerRef = useRef<HTMLDivElement | undefined>(null)
@@ -59,7 +61,7 @@ export const useScroll = ({
     scrollToRow()
   }, [selectedIndex])
   useEffect(() => {
-    if ((focusedPanel !== 'products' && focusedPanel !== 'productsControl') || (productToEdit !== null || productToDelete !== null)) return
+    if (((focusedPanel === 'cart') || (productToEdit !== null || productToDelete !== null)) || addProduct === true) return
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'ArrowDown') {
         setSelectedIndex((prev) => Math.min(prev + 1, productos.length - 1))
@@ -72,7 +74,7 @@ export const useScroll = ({
         setFocusedPanel('cart')
       }
 
-      if ((e.key === 'Enter' && focusedPanel === 'products') && (productToEdit === null || productToDelete === null)) {
+      if ((e.key === 'Enter' && focusedPanel === 'products') && (productToEdit === null || productToDelete === null) && addProduct === false) {
         const producto = productos[selectedIndex]
         if (!producto) return
 
@@ -80,12 +82,12 @@ export const useScroll = ({
         if (producto.stock > 0 && !inCart) {
           addToCart(producto)
         }
-      } else if ((e.key === 'Enter' && focusedPanel === 'productsControl') && (productToEdit === null || productToDelete === null) ) {
+      } else if ((e.key === 'Enter' && focusedPanel === 'productsControl') && (productToEdit === null || productToDelete === null) && addProduct === false) {
         const producto = productos[selectedIndex]
         if (!producto) return
         setProductToEdit(producto)
       }
-      if (e.key === 'Backspace' && focusedPanel === 'productsControl') {
+      if ((e.key === 'Backspace' && focusedPanel === 'productsControl')  && (productToEdit === null || productToDelete === null) && addProduct === false) {
         const producto = productos[selectedIndex]
         if (!producto) return
         setProductToDelete(producto)
@@ -93,7 +95,7 @@ export const useScroll = ({
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [focusedPanel, productos, selectedIndex, cart, addToCart, setFocusedPanel])
+  }, [focusedPanel, productos, selectedIndex, cart, addToCart, setFocusedPanel, productToDelete, productToEdit, addProduct])
 
   return { rowRefs, containerRef, selectedIndex, setSelectedIndex }
 }

@@ -4,11 +4,11 @@ import { EditIcon } from "../icons/Edit"
 import { EliminateIcon } from "../icons/Eliminate"
 import { useScroll } from "../hooks/useScroll"
 import { useState } from "react"
-import { CartDelete } from "./CartDelete"
-import { CartEdit } from "./CartEdit"
+import { CartDelete } from "./CardDelete"
+import { CartEdit } from "./CardEdit"
 
 
-export function ProductsTableMagment({ productos, setProductos, focusedPanel, setFocusedPanel }: { productos: Producto[], setProductos: (p: Producto[]) => void, focusedPanel: "products" | "productsControl" | "cart", setFocusedPanel: (panel: "products" | "productsControl" | "cart") => void }) {
+export function ProductsTableMagment({ productos, setProductos, focusedPanel, setFocusedPanel, addProduct }: { productos: Producto[], setProductos: (p: Producto[]) => void, focusedPanel: "products" | "productsControl" | "cart", setFocusedPanel: (panel: "products" | "productsControl" | "cart") => void, addProduct: boolean }) {
   const { cart, addToCart } = useCart()
   const [productToEdit, setProductToEdit] = useState<Producto | null>(null)
   const [productToDelete, setProductToDelete] = useState<Producto | null>(null)
@@ -22,7 +22,8 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
       setProductToEdit,
       setProductToDelete,
       productToEdit,
-      productToDelete
+      productToDelete,
+      addProduct
     })
 
   async function handleDelete(producto: Producto) {
@@ -36,7 +37,7 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
   }
 
   return (
-    <div className={`min-w-full rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[530px] overflow-y-auto ${focusedPanel === "products" ? "ring-2 ring-primary" : ""}`} ref={containerRef}>
+    <div className={`min-w-full rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[520px] overflow-y-auto ${focusedPanel === "products" ? "ring-2 ring-primary" : ""}`} ref={containerRef}>
       {productToDelete && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <CartDelete producto={productToDelete} setProductos={setProductos} setProductToDelete={setProductToDelete} />
@@ -44,7 +45,7 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
       )}
       {productToEdit && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <CartEdit producto={productToEdit} setProductos={setProductos} setProductToEdit={setProductToEdit} />
+          <CartEdit productos={productos} producto={productToEdit} setProductos={setProductos} setProductToEdit={setProductToEdit} />
         </div>
       )}
       <table className="w-full">
