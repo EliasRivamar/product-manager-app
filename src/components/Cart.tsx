@@ -1,30 +1,116 @@
+import { useEffect, useRef, useState } from "react"
 import { useCart } from "../hooks/useCart"
 import { EliminateIcon } from "../icons/Eliminate"
 import { Button } from "./Button"
 import { QuantityInput } from "./QuantityInput"
+import { productRepository } from "../db/productRepository"
+import type { Producto } from "../types/types"
 
 
-export function Cart() {
+export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedPanel: "products" | "cart", setFocusedPanel: (panel: "products" | "cart") => void, setProductos: (p: Producto[]) => void}) {
   const { cart, clearCart, addToCart, removeFromCart, restQuantity } = useCart()
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
   const total = cart.reduce(
     (acc, item) => acc + item.producto.price * item.quantity,
     0
   )
 
-  const handleSubmitCart = () => {
+  const rowRefs = useRef<(HTMLTableRowElement | undefined)[]>([])
+  const containerCart = useRef<HTMLDivElement | undefined>(null)
+
+
+
+  // Scroll automático
+   useEffect(() => {
+    if (focusedPanel !== "cart") return
+
+    function scrollToRow() {
+      const row = rowRefs.current[selectedIndex]
+      const container = containerCart.current
+  
+      if (!row || !container) return
+  
+      const rowTop = row.offsetTop
+      const rowBottom = rowTop + row.offsetHeight
+  
+      const viewTop = container.scrollTop
+      const viewBottom = viewTop + container.clientHeight
+  
+      // Si la fila está por encima de la vista → scrollear hacia arriba
+      if (rowTop < viewTop) {
+        container.scrollTo({ top: rowBottom - (90), behavior: "smooth" })
+      }
+  
+      // Si la fila está por debajo de la vista → scrollear hacia abajo
+      else if (rowBottom > viewBottom) {
+        container.scrollTo({
+          top: rowBottom - container.clientHeight + 8,
+          behavior: "smooth"
+        })
+      }
+    }
+    scrollToRow()
+    }, [selectedIndex])
+  
+
+
+  // --- Manejar flechas y Enter ---
+  useEffect(() => {
+    if (focusedPanel !== "cart") return
     
+    function handleKeyDown(e: KeyboardEvent) {
+
+
+      if (e.key === "ArrowDown") {
+        setSelectedIndex(prev => Math.min(prev + 1, cart.length - 1))
+      }
+
+      if (e.key === "ArrowUp") {
+        setSelectedIndex(prev => Math.max(prev - 1, 0))
+      }
+      if (e.key === 'ArrowLeft') {
+        setFocusedPanel('products')
+      }
+
+      if (e.key === "Delete" || e.key === "Backspace") {
+        const item = cart[selectedIndex]
+        if (item) {
+          removeFromCart(item.producto)
+        }
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [focusedPanel, cart, selectedIndex, removeFromCart, setFocusedPanel])
+
+
+
+  async function handleSubmitBuy () {
+    cart.forEach(async(item) => {
+       await productRepository.update(item.producto.id, {
+        stock: item.producto.stock - item.quantity
+      })
+      const nuevos = await productRepository.getAll()
+      setProductos(nuevos)
+      clearCart()
+    })
+
+
   }
   return (
-    <div className='min-w-[22%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark min-h-[200px] max-h-[540px] p-4 overflow-y-auto'>
-      <header className="flex justify-center items-center gap-7">
+    <div className={`min-w-[22%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark min-h-[200px] max-h-[530px] px-4 pb-4 overflow-y-auto ${focusedPanel === "cart" ? "ring-2 ring-primary" : ""}`} ref={containerCart}>
+      <header className="flex border-b border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark justify-center items-center gap-7 sticky top-0 p-4">
         <h2 className='text-xl font-bold'>Ticket</h2>
         <button className="flex items-center gap-3 px-3 py-2 rounded text-danger bg-danger/10 hover:bg-danger/20 dark:bg-danger/20 dark:hover:bg-danger/30 hover:scale-105 text-sm duration-300" onClick={() => clearCart()}>Eliminar Ticket</button>
       </header>
       <hr className="border-bor-light dark:border-bor-dark my-4" />
-      <ul className="gap-2">
+      <ul className="gap-2 ">
         {
-          cart.map((item) => {
-            return <li key={item.producto.id} className='flex flex-col list-items gap-2'>
+          cart.map((item, index) => {
+            const isSelected = index === selectedIndex
+            return <li key={item.producto.id} className={`flex flex-col list-items gap-2 ${isSelected ? 'bg-background-light dark:bg-background-dark' : ''}`}
+              ref={(el) => rowRefs.current[index] = el}>
               <div className='flex items-center gap-4'>
                 <div className='flex-1'>
                   <p className='font-semibold text-sm'>{item.producto.name}</p>
@@ -37,7 +123,7 @@ export function Cart() {
                 </div>
                 <div className=''>
                   <button className="bg-danger/10 hover:bg-danger/20 dark:bg-danger/20 dark:hover:bg-danger/30 rounded-lg  text-sm hover:scale-105 duration-300 py-1 px-1 cursor-pointer" onClick={() => removeFromCart(item.producto)}>
-                    <span><EliminateIcon /></span>
+                    <span><EliminateIcon className={'h5 w-5 stroke-danger'} /></span>
                   </button>
                 </div>
               </div>
@@ -52,7 +138,7 @@ export function Cart() {
         </div>
         <footer className='flex justify-center items-center'>
           {/* TODO: Cuando se haga click mandar el total a las analiticas, borrar el carrito y actualizar la planilla de productos con el nuevo stock */}
-          <Button onClick={handleSubmitCart}>Generar Ticket</Button>
+          <Button onClick={() => handleSubmitBuy()}>Generar Ticket</Button>
         </footer>
       </div>
 

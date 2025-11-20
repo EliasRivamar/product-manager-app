@@ -1,8 +1,8 @@
 import Trash from '../assets/trash.svg?react'
 
 
-export function EliminateIcon() {
+export function EliminateIcon({className}:{className: string}) {
   return (
-    <Trash className="h-5 w-5 stroke-danger" />
+    <Trash className={className} />
   )
 }
