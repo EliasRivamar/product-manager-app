@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { productRepository } from "../db/productRepository";
-import type { Producto } from "../types/types";
-import { useToast } from "../context/toast";
+import { productRepository } from "../../db/productRepository";
+import type { Producto } from "../../types/types";
+import { useToast } from "../../hooks/useToast"
 
 export function CartAdd({ productos, setAddProduct, setProductos }: { productos: Producto[], setAddProduct: (value: boolean) => void, setProductos: (p: Producto[]) => void }) {
   const {showToast} = useToast()

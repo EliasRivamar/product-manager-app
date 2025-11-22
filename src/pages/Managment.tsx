@@ -8,7 +8,7 @@ import debounce from "just-debounce-it";
 import { productRepository } from "../db/productRepository";
 import { initDatabase } from "../db/init";
 import { AddProduct } from "../components/AddProduct";
-import { CartAdd } from "../components/CardAdd";
+import { CartAdd } from "../components/Cards/CardAdd";
 
 
 export function Managment() {

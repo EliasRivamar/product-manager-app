@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { productRepository } from "../db/productRepository";
-import type { Producto } from "../types/types";
-import { useToast } from "../context/toast";
+import { productRepository } from "../../db/productRepository";
+import type { Producto } from "../../types/types";
+import { useToast } from "../../hooks/useToast";
 
-export function CartEdit({ productos, producto, setProductos, setProductToEdit }: { productos: Producto[],producto: Producto, setProductos: (p: Producto[]) => void, setProductToEdit: (p: Producto | null) => void }) {
+export function CartEdit({ productos, producto, setProductos, setProductToEdit }: { productos: Producto[], producto: Producto, setProductos: (p: Producto[]) => void, setProductToEdit: (p: Producto | null) => void }) {
   const { showToast } = useToast()
   const [formValues, setFormValues] = useState({
     id: producto.id,
@@ -17,14 +17,14 @@ export function CartEdit({ productos, producto, setProductos, setProductToEdit }
     const productoEditado: Producto = { id: formValues.id, name: formValues.name, price: Number(formValues.price), stock: Number(formValues.stock), category: formValues.category };
     const othersProducts = productos.filter(item => item !== producto)
     console.log(othersProducts.find(item => item.name.toLocaleLowerCase() === productoEditado.name.toLocaleLowerCase()))
-    if(othersProducts.find(item => item.id.toLocaleLowerCase() === productoEditado.id.toLocaleLowerCase()) !== undefined) {
+    if (othersProducts.find(item => item.id.toLocaleLowerCase() === productoEditado.id.toLocaleLowerCase()) !== undefined) {
       showToast(`No se puede agregar el producto, porque ya existe un producto con este codigo.`, "error");
       return
-      }
-      if(othersProducts.find(item => item.name.toLocaleLowerCase() === productoEditado.name.toLocaleLowerCase()) !== undefined) {
+    }
+    if (othersProducts.find(item => item.name.toLocaleLowerCase() === productoEditado.name.toLocaleLowerCase()) !== undefined) {
       showToast(`No se puede agregar el producto, porque ya existe un producto con este nombre.`, "error");
       return
-      }
+    }
 
     await productRepository.update(formValues.id, {
       name: formValues.name,

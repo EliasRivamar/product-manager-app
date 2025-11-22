@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useState, type ReactNode } from "react";
 
 type ToastType = "success" | "error";
 
@@ -12,7 +12,7 @@ interface ToastContextProps {
   showToast: (message: string, type?: ToastType) => void;
 }
 
-const ToastContext = createContext<ToastContextProps | undefined>(undefined);
+export const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -20,24 +20,19 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   function showToast(message: string, type: ToastType = "success") {
     const id = Date.now();
-
     setToasts(prev => [...prev, { id, message, type }]);
-
     setTimeout(() => {
       setRemoving(prev => [...prev, id]);
-
-      // REMOVE FROM DOM AFTER ANIMATION
       setTimeout(() => {
         setToasts(prev => prev.filter(t => t.id !== id));
         setRemoving(prev => prev.filter(r => r !== id));
-      }, 250); // same duration as animation
+      }, 250);
     }, 3000);
   }
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-
       <div className="fixed bottom-5 right-5 flex flex-col gap-3 z-50">
         {toasts.map(toast => (
           <div
@@ -48,10 +43,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               ${toast.type === "success"
                 ? "bg-success text-white"
                 : "bg-danger text-white"
-              }
-              dark:${toast.type === "success"
-                ? "bg-success"
-                : "bg-danger"
               }
               ${removing.includes(toast.id)
                 ? "animate-toast-exit"
@@ -99,10 +90,4 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
     </ToastContext.Provider>
   );
-}
-
-export function useToast() {
-  const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error("useToast must be used inside ToastProvider");
-  return ctx;
 }

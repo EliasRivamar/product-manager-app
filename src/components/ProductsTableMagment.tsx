@@ -4,8 +4,8 @@ import { EditIcon } from "../icons/Edit"
 import { EliminateIcon } from "../icons/Eliminate"
 import { useScroll } from "../hooks/useScroll"
 import { useState } from "react"
-import { CartDelete } from "./CardDelete"
-import { CartEdit } from "./CardEdit"
+import { CartDelete } from "./Cards/CardDelete"
+import { CartEdit } from "./Cards/CardEdit"
 
 
 export function ProductsTableMagment({ productos, setProductos, focusedPanel, setFocusedPanel, addProduct }: { productos: Producto[], setProductos: (p: Producto[]) => void, focusedPanel: "products" | "productsControl" | "cart", setFocusedPanel: (panel: "products" | "productsControl" | "cart") => void, addProduct: boolean }) {
@@ -79,7 +79,7 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
                       <span className={`${producto.stock === 0 ? 'text-danger' : 'text-success'}`}>{producto.stock} unidades</span>
                     </div>
                   </td>
-                  <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${producto.price}</td>
+                  <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${producto.price.toLocaleString("es-AR")}</td>
                   <td className="px-6 py-2 place-items-center justify-center">
                     <button
                       className={`bg-primary/20 rounded-lg text-text-primary-dark hover:bg-primary/30 text-sm hover:scale-105 duration-300 py-2 px-3 cursor-pointer`}
@@ -88,11 +88,11 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
                     </button>
                   </td>
                   <td className="px-7 py-2">
-                      <button
-                        className={`bg-danger/20 rounded-lg text-text-primary-dark hover:bg-danger/30 text-sm hover:scale-105 duration-300 py-2 px-3 cursor-pointer`}
-                        onClick={() => handleDelete(producto)}>
-                        <span><EliminateIcon className={'stroke-danger'} /></span>
-                      </button>
+                    <button
+                      className={`bg-danger/20 rounded-lg text-text-primary-dark hover:bg-danger/30 text-sm hover:scale-105 duration-300 py-2 px-3 cursor-pointer`}
+                      onClick={() => handleDelete(producto)}>
+                      <span><EliminateIcon className={'stroke-danger'} /></span>
+                    </button>
 
                   </td>
                 </tr>

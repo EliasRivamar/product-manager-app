@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useCart } from "../hooks/useCart";
-import type { Producto } from "../types/types";
+import { useCart } from "../../hooks/useCart";
+import type { Producto } from "../../types/types";
 
 export function QuantityInput({ product, quantity }: { product: Producto, quantity: number }) {
     const [valueInput, setValueInput] = useState(String(quantity));

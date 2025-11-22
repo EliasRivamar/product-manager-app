@@ -37,3 +37,21 @@ interface FiltersContextType {
   filters: FiltersState
   setFilters: React.Dispatch<React.SetStateAction<FiltersState>>
 }
+interface SaleContextType {
+  sales: Sale[]
+  addSale: (s: Sale) => void
+}
+
+export interface Sale {
+  id: string;
+  date: number; // YYYY-MM-DD
+  total: number;
+  items: any[];
+}
+
+type CustomTooltipProps = {
+  active?: boolean;
+  payload?: { total: number, ventas: number,}[];
+  label?: string | number;
+};
+

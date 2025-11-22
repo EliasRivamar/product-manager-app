@@ -1,6 +1,6 @@
-import { useToast } from "../context/toast";
-import { productRepository } from "../db/productRepository";
-import type { Producto } from "../types/types";
+import { useToast } from "../../hooks/useToast";
+import { productRepository } from "../../db/productRepository";
+import type { Producto } from "../../types/types";
 
 export function CartDelete({ producto, setProductos, setProductToDelete }: { producto: Producto, setProductos: (p: Producto[]) => void, setProductToDelete: (p: Producto | null) => void }) {
   const { showToast } = useToast();

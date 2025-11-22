@@ -1,6 +1,6 @@
 import { Filters } from "../components/Filters";
-import { ProductsTable } from "../components/ProductsTable";
-import { Cart } from "../components/Cart";
+import { ProductsTable } from "../components/Home/ProductsTable";
+import { Cart } from "../components/Home/Cart";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import type { Producto } from "../types/types";
@@ -18,7 +18,7 @@ export function Home() {
   const { filteredProducts } = useFilters(productos)
   const [focusedPanel, setFocusedPanel] = useState<"products" | "cart">("products");
 
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchValue(value)
