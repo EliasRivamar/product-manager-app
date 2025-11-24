@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import { salesRepository } from "../db/salesRepository";
 import { type SaleContextType, type Sale } from "../types/types";
 
@@ -19,7 +19,7 @@ export function SalesProvider({ children }: {children: ReactNode}) {
 
   return (
     <SalesContext.Provider value={{
-      sales, addSale 
+      sales, addSale, setSales 
       }}>
       {children}
     </SalesContext.Provider>

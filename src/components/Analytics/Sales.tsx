@@ -1,7 +1,12 @@
+import { useSettings } from "../../hooks/useSettings";
 import { SalesIcon } from "../../icons/Sales";
+import { TrendingDownIcon } from "../../icons/TrendingDown";
+import { TrendingUpIcon } from "../../icons/TrendingUp";
 import type { Sale } from "../../types/types";
 
-export function Sales({sales}: {sales: Sale[]}) {
+export function Sales({ sales }: { sales: Sale[] }) {
+  const { settings } = useSettings()
+  const { separator } = settings
 
   function normalize(d: Date) {
     d.setHours(0, 0, 0, 0);
@@ -28,7 +33,7 @@ export function Sales({sales}: {sales: Sale[]}) {
   // % DE CAMBIO REAL
   let percentageChange: number;
   if (totalYesterday === 0) {
-    percentageChange = totalToday > 0 ? Infinity : 0;
+    percentageChange = ((totalToday - totalYesterday) / 1) * 100;
   } else {
     percentageChange = ((totalToday - totalYesterday) / totalYesterday) * 100;
   }
@@ -48,14 +53,15 @@ export function Sales({sales}: {sales: Sale[]}) {
           <SalesIcon />
         </div>
         <div className="flex items-center justify-center gap-1 mt-2">
-        {percentageChange === Infinity ? (
+          {percentageChange === Infinity ? (
             <p className="text-success text-sm font-medium leading-normal">
               +∞% vs ayer
             </p>
           ) : (
             <div className="flex gap-2">
-              <p className={`${color} text-sm font-medium leading-normal`}>
-                {percentageChange.toFixed(1).toLocaleString()}% vs ayer
+              <p className={`${color} flex gap-2 text-sm font-medium leading-normal`}>
+                {color ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                {separator === 'Punto (.)' ? percentageChange.toLocaleString('es-AR') : percentageChange.toLocaleString('en-US')}% vs ayer
               </p>
             </div>
           )}

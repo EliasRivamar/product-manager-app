@@ -1,14 +1,19 @@
 import { XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
 import type { CustomTooltipProps } from "../../types/types";
 import { useSale } from "../../hooks/useSale";
+import { TrendingUpIcon } from "../../icons/TrendingUp";
+import { TrendingDownIcon } from "../../icons/TrendingDown";
+import { useSettings } from "../../hooks/useSettings";
 
 function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
+  const { settings } = useSettings()
+  const { separator } = settings
   if (active && payload && payload.length) {
-    const {total, ventas} = payload[0].payload
+    const { total, ventas } = payload[0].payload
     return (
       <div className="bg-surface-light text-text-primary-light dark:bg-surface-dark dark:text-text-primary-dark p-2 rounded-xl border border-bor-light dark:border-bor-dark shadow-lg">
         <p className="text-sm font-semibold">{`Día: ${label}`}</p>
-        <p className="text-sm">{`Total vendido: $${total.toLocaleString('es-AR')}`}</p>
+        <p className="text-sm">{`Total vendido: $${ separator === 'Punto (.)' ? total.toLocaleString('es-AR') : total.toLocaleString('en-US')}`}</p>
         <p className="text-sm">{`Total ventas: ${ventas}`}</p>
       </div>
     );
@@ -20,6 +25,8 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
 
 export function Graph({ data, month, pastMonth }: { pastMonth: string | undefined, month: string | undefined, data: { day: number; total: number; ventas: number; }[] }) {
   const { sales } = useSale()
+  const { settings } = useSettings()
+  const { separator } = settings
   const monthIndex = new Date(`${month} 1`).getMonth(); // si month es "Enero", "Febrero", etc.
 
   const monthlyEarnings = sales
@@ -32,21 +39,21 @@ export function Graph({ data, month, pastMonth }: { pastMonth: string | undefine
   const pastMonthlyEarnings = sales
     .filter(sale => {
       const d = new Date(sale.date)
-      return d.getMonth() === monthIndex-1
+      return d.getMonth() === monthIndex - 1
     })
     .reduce((acc, sale) => acc + sale.total, 0)
 
-    let percentageChange: number;
-    if (monthlyEarnings === 0) {
-      percentageChange = monthlyEarnings > 0 ? Infinity : 0;
-    } else if(pastMonthlyEarnings === 0) {
-      percentageChange = ((monthlyEarnings - pastMonthlyEarnings) / 1) * 100;
-    }else {
-      percentageChange = ((monthlyEarnings - pastMonthlyEarnings) / pastMonthlyEarnings) * 100;
-    }
-  
-    const isPositive = percentageChange >= 0;
-    const color = isPositive ? "text-success" : "text-danger";
+  let percentageChange: number;
+  if (monthlyEarnings === 0) {
+    percentageChange = ((monthlyEarnings - pastMonthlyEarnings) / pastMonthlyEarnings) * 100;
+  } else if (pastMonthlyEarnings === 0) {
+    percentageChange = ((monthlyEarnings - pastMonthlyEarnings) / 1) * 100;
+  } else {
+    percentageChange = ((monthlyEarnings - pastMonthlyEarnings) / pastMonthlyEarnings) * 100;
+  }
+
+  const isPositive = percentageChange >= 0;
+  const color = isPositive ? "text-success" : "text-danger";
 
 
 
@@ -58,17 +65,12 @@ export function Graph({ data, month, pastMonth }: { pastMonth: string | undefine
           <p className="text-gray-500 dark:text-[#92adc9] text-sm font-normal leading-normal">Total para {month}</p>
         </div>
         <div className="text-right place-content-start">
-          <p className="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">${monthlyEarnings.toLocaleString('es-AR')}</p>
+          <p className="text-gray-900 dark:text-white tracking-tight text-3xl font-bold leading-tight">${separator === 'Punto (.)' ? monthlyEarnings.toLocaleString('es-AR') : monthlyEarnings.toLocaleString('en-US')}</p>
           <div className="flex items-center justify-end gap-1 mt-1">
-          {percentageChange === Infinity ? (
-            <p className="text-success text-sm font-medium leading-normal">
-              +∞% vs {pastMonth}
+            <p className={`${color} flex gap-2 text-sm font-medium leading-normal`}>
+              {color ? <TrendingUpIcon /> : <TrendingDownIcon />}
+              {separator === 'Punto (.)' ? percentageChange.toLocaleString('es-AR') : percentageChange.toLocaleString('en-US')}% vs {pastMonth}
             </p>
-          ) : (
-            <p className={`${color} text-sm font-medium leading-normal`}>
-              {percentageChange.toLocaleString('es-AR')}% vs {pastMonth}
-            </p>
-          )}
           </div>
         </div>
 
@@ -90,7 +92,7 @@ export function Graph({ data, month, pastMonth }: { pastMonth: string | undefine
           <XAxis dataKey="day" stroke="#94a3b8" tickLine={false} />
           <YAxis stroke="#94a3b8" tickLine={false} />
           <Tooltip
-            content={<CustomTooltip />}
+            content={<CustomTooltip/>}
             cursor={{
               stroke: "#137fec",
               strokeWidth: 1.5,

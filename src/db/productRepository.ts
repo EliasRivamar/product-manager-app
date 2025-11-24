@@ -21,6 +21,10 @@ export const productRepository = {
     await db.products.delete(id)
   },
 
+  async reset() {
+    await db.products.clear()
+  },
+
   /** Importación desde CSV al iniciar */
   async bulkInsert(products: Producto[]): Promise<void> {
     await db.products.bulkAdd(products)

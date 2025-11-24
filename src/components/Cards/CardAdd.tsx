@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { productRepository } from "../../db/productRepository";
 import type { Producto } from "../../types/types";
 import { useToast } from "../../hooks/useToast"
+import { useProduct } from "../../hooks/useProduct";
 
-export function CartAdd({ productos, setAddProduct, setProductos }: { productos: Producto[], setAddProduct: (value: boolean) => void, setProductos: (p: Producto[]) => void }) {
+export function CartAdd({ productos, setAddProduct}: { productos: Producto[], setAddProduct: (value: boolean) => void}) {
+  const {setProductos, addProduct, getAll} = useProduct()
   const {showToast} = useToast()
   const [formValues, setFormValues] = useState({
     id: "",
@@ -24,8 +25,8 @@ export function CartAdd({ productos, setAddProduct, setProductos }: { productos:
     showToast(`No se puede agregar el producto, porque ya existe un producto con este nombre.`, "error");
     return
     }
-    await productRepository.add(producto);
-    const nuevos = await productRepository.getAll();
+    await addProduct(producto);
+    const nuevos = await getAll();
     setProductos(nuevos);
     setAddProduct(false);
     showToast(`Producto "${producto.name}" agregado correctamente`, "success");

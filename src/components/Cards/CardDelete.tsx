@@ -1,13 +1,14 @@
 import { useToast } from "../../hooks/useToast";
-import { productRepository } from "../../db/productRepository";
 import type { Producto } from "../../types/types";
+import { useProduct } from "../../hooks/useProduct";
 
-export function CartDelete({ producto, setProductos, setProductToDelete }: { producto: Producto, setProductos: (p: Producto[]) => void, setProductToDelete: (p: Producto | null) => void }) {
+export function CartDelete({ producto, setProductToDelete }: { producto: Producto, setProductToDelete: (p: Producto | null) => void }) {
+  const {setProductos, deleteProduct, getAll} = useProduct()
   const { showToast } = useToast();
 
   async function handleDelete(producto: Producto, setProductos: (p: Producto[]) => void) {
-    await productRepository.delete(producto.id)
-    const nuevos = await productRepository.getAll()
+    await deleteProduct(producto.id)
+    const nuevos = await getAll()
     // ACTUALIZAR LISTA
     setProductToDelete(null)
     setProductos(nuevos)

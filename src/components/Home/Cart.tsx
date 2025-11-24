@@ -3,17 +3,21 @@ import { useCart } from "../../hooks/useCart"
 import { EliminateIcon } from "../../icons/Eliminate"
 import { Button } from "../Button"
 import { QuantityInput } from "./QuantityInput"
-import { productRepository } from "../../db/productRepository"
-import type { Producto } from "../../types/types"
 import { useToast } from "../../hooks/useToast"
 import { useSale } from "../../hooks/useSale"
+import { useProduct } from "../../hooks/useProduct"
+import { useSettings } from "../../hooks/useSettings"
 
 
-export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedPanel: "products" | "cart", setFocusedPanel: (panel: "products" | "cart") => void, setProductos: (p: Producto[]) => void }) {
+
+export function Cart({ focusedPanel, setFocusedPanel }: { focusedPanel: "products" | "cart", setFocusedPanel: (panel: "products" | "cart") => void}) {
   const { cart, clearCart, addToCart, removeFromCart, restQuantity } = useCart()
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const {productos, setProductos, updateProduct, getAll} = useProduct()
+  const {settings} = useSettings()
   const { showToast } = useToast()
   const { addSale } = useSale()
+  const { separator } = settings
 
 
   const total = cart.reduce(
@@ -93,10 +97,16 @@ export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedP
 
   async function handleSubmitBuy() {
     cart.forEach(async (item) => {
-      await productRepository.update(item.producto.id, {
+      await updateProduct(item.producto.id, {
         stock: item.producto.stock - item.quantity
       })
-      const nuevos = await productRepository.getAll()
+      const nuevos = await getAll()
+      nuevos.forEach(producto => {
+        if (settings.lowStock && producto.stock === settings.lowStockValue) {
+          showToast(`Quedan solo ${producto.stock} ${producto.name}`, 'error')
+        }
+      })
+    
       setProductos(nuevos)
       const now = new Date();
       const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -110,9 +120,8 @@ export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedP
       clearCart()
       showToast('Compra realizada con exito. Stock actualizado.', 'success')
     })
-
-
-  }
+    
+    }
   return (
     <div className={`min-w-[22%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark min-h-[200px] max-h-[530px] px-4 pb-4 overflow-y-auto ${focusedPanel === "cart" ? "ring-2 ring-primary" : ""}`} ref={containerCart}>
       <header className="flex border-b border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark justify-center items-center gap-7 sticky top-0 p-4">
@@ -129,7 +138,7 @@ export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedP
               <div className='flex items-center gap-4'>
                 <div className='flex-1'>
                   <p className='font-semibold text-sm'>{item.producto.name}</p>
-                  <p className='text-sm text-text-secondary-light dark:text-text-secondary-light'>${item.price.toLocaleString("es-AR")}</p>
+                  <p className='text-sm text-text-secondary-light dark:text-text-secondary-light'>${ separator === 'Punto (.)' ? item.price.toLocaleString("es-AR") : item.price.toLocaleString("en-US") }</p>
                 </div>
                 <div className="flex gap-3 items-center">
                   <button className={`flex h-7 w-7 items-center justify-center rounded-full border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark hover:bg-background-light dark:hover:bg-background-dark`} onClick={() => restQuantity(item.producto)}>-</button>
@@ -149,7 +158,7 @@ export function Cart({ focusedPanel, setFocusedPanel, setProductos }: { focusedP
       </ul>
       <div className='border-t border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark sticky -bottom-4 p-3'>
         <div className="text-center text-lg font-semibold mb-4">
-          <p>Total: ${total.toLocaleString('es-AR')}</p>
+          <p>Total: ${separator === 'Punto (.)' ? total.toLocaleString("es-AR") : total.toLocaleString("en-US")}</p>
         </div>
         <footer className='flex justify-center items-center'>
 

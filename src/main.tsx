@@ -7,19 +7,23 @@ import { FiltersProvider } from './context/filters.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { ToastProvider } from './context/toast.tsx'
 import { SalesProvider } from './context/sales.tsx'
+import { SettingsProvider } from './context/settings.tsx'
+import { ProductsProvider } from './context/products.tsx'
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <SalesProvider>
-      <FiltersProvider>
-        <CartProvider>
-          <ToastProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </ToastProvider>
-        </CartProvider>
-      </FiltersProvider>
-    </SalesProvider>
-  </StrictMode>,
+  <SettingsProvider>
+    <ProductsProvider>
+      <SalesProvider>
+        <FiltersProvider>
+          <CartProvider>
+            <ToastProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </ToastProvider>
+          </CartProvider>
+        </FiltersProvider>
+      </SalesProvider>
+    </ProductsProvider>
+  </SettingsProvider>
 )

@@ -2,10 +2,16 @@ import { type Producto } from "../../types/types"
 import { useCart } from "../../hooks/useCart"
 import { AddToCartIcon } from "../../icons/AddCart"
 import { useScroll } from "../../hooks/useScroll"
+import { useSettings } from "../../hooks/useSettings"
+
 
 export function ProductsTable({ productos, focusedPanel, setFocusedPanel }: { productos: Producto[], focusedPanel: "products" | "cart", setFocusedPanel: (panel: "products" | "cart") => void }) {
   const { cart, addToCart } = useCart()
   const {rowRefs, containerRef, selectedIndex, setSelectedIndex} = useScroll({productos, focusedPanel, cart, addToCart, setFocusedPanel, setProductToEdit: () => (null) , setProductToDelete: () => (null), productToEdit: null, productToDelete: null, addProduct: false})
+  const { settings } = useSettings()
+  const { separator } = settings
+
+
   
   return (
     <div className={` min-w-[60%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[530px] overflow-y-auto ${focusedPanel === "products" ? "ring-2 ring-primary" : ""}`} ref={containerRef}>
@@ -38,9 +44,10 @@ export function ProductsTable({ productos, focusedPanel, setFocusedPanel }: { pr
                     <div className="flex items-center gap-2">
                       <span className={`h-2 w-2 rounded-full ${producto.stock === 0 ? 'bg-danger' : 'bg-success'}`}></span>
                       <span className={`${producto.stock === 0 ? 'text-danger' : 'text-success'}`}>{producto.stock} unidades</span>
+                      
                     </div>
                   </td>
-                  <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${producto.price.toLocaleString("es-AR")}</td>
+                  <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${ separator === 'Punto (.)' ? producto.price.toLocaleString("es-AR") : producto.price.toLocaleString("en-US") }</td>
                   <td className="px-4 py-2">
                     <button
                       disabled={producto.stock === 0 || inCart}

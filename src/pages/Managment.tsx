@@ -2,17 +2,16 @@ import { Filters } from "../components/Filters";
 import { ProductsTableMagment } from "../components/ProductsTableMagment";
 import { SearchBar } from "../components/SearchBar";
 import { useState, useEffect } from "react";
-import type { Producto } from "../types/types";
 import { useFilters } from "../hooks/useFilters";
 import debounce from "just-debounce-it";
-import { productRepository } from "../db/productRepository";
-import { initDatabase } from "../db/init";
+
 import { AddProduct } from "../components/AddProduct";
 import { CartAdd } from "../components/Cards/CardAdd";
+import { useProduct } from "../hooks/useProduct";
 
 
 export function Managment() {
-  const [productos, setProductos] = useState<Producto[]>([])
+  const {productos} = useProduct()
   const [searchValue, setSearchValue] = useState('')
   const [addProduct, setAddProduct] = useState<boolean>(false)
   const {filteredProducts } = useFilters(productos)
@@ -27,13 +26,6 @@ export function Managment() {
   const handleAddProduct = () => {
     setAddProduct(true)
   }
-  // TODO: DEBOUNCE AL BUSCAR
-  useEffect(() => {
-    initDatabase().then(() => {
-      console.log("DB lista");
-      productRepository.getAll().then(setProductos);
-    });
-  }, []);
 
   const productosFiltrados = searchValue === ''
     ? filteredProducts
@@ -46,7 +38,7 @@ export function Managment() {
       <div className="flex flex-col h-full w-full">
         {addProduct && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <CartAdd productos={productos} setAddProduct={setAddProduct} setProductos={setProductos} />
+            <CartAdd productos={productos} setAddProduct={setAddProduct} />
           </div>
         )}
         <main className="grid grid-rows-[100px, 1fr] grid-cols-[200px_minmax(700px,1fr)] gap-4 px-4 w-full place-content-center">
@@ -60,7 +52,7 @@ export function Managment() {
             <Filters ></Filters>
           </div>
           <div className="row-start-2 row-end-2">
-            <ProductsTableMagment productos={productosFiltrados} setProductos={setProductos} focusedPanel={focusedPanel} setFocusedPanel={setFocusedPanel} addProduct={addProduct} />
+            <ProductsTableMagment productos={productosFiltrados} focusedPanel={focusedPanel} setFocusedPanel={setFocusedPanel} addProduct={addProduct} />
           </div>
         </main>
       </div>

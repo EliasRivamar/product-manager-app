@@ -2,18 +2,15 @@ import { Filters } from "../components/Filters";
 import { ProductsTable } from "../components/Home/ProductsTable";
 import { Cart } from "../components/Home/Cart";
 import { SearchBar } from "../components/SearchBar";
-import { useState, useEffect } from "react";
-import type { Producto } from "../types/types";
+import { useState} from "react";
 import { useFilters } from "../hooks/useFilters";
-import debounce from "just-debounce-it";
-import { productRepository } from "../db/productRepository";
-import { initDatabase } from "../db/init";
+import { useProduct } from "../hooks/useProduct";
 
 
 
 
 export function Home() {
-  const [productos, setProductos] = useState<Producto[]>([])
+  const {productos} = useProduct()
   const [searchValue, setSearchValue] = useState('')
   const { filteredProducts } = useFilters(productos)
   const [focusedPanel, setFocusedPanel] = useState<"products" | "cart">("products");
@@ -23,14 +20,6 @@ export function Home() {
     const value = e.target.value
     setSearchValue(value)
   }
-
-  // TODO: DEBOUNCE AL BUSCAR
-  useEffect(() => {
-    initDatabase().then(() => {
-      console.log("DB lista");
-      productRepository.getAll().then(setProductos);
-    });
-  }, []);
 
   const productosFiltrados = searchValue === ''
     ? filteredProducts
@@ -46,13 +35,13 @@ export function Home() {
             <SearchBar onChange={handleChange}></SearchBar>
           </div>
           <div className="row-start-2 row-end-2">
-            <Filters ></Filters>
+            <Filters></Filters>
           </div>
           <div className="row-start-2 row-end-2">
             <ProductsTable productos={productosFiltrados} focusedPanel={focusedPanel} setFocusedPanel={setFocusedPanel} />
           </div>
           <div className="row-start-2 row-end-2">
-            <Cart focusedPanel={focusedPanel} setFocusedPanel={setFocusedPanel} setProductos={setProductos}></Cart>
+            <Cart focusedPanel={focusedPanel} setFocusedPanel={setFocusedPanel}></Cart>
           </div>
         </main>
       </div>

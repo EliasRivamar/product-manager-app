@@ -8,5 +8,9 @@ export const salesRepository = {
 
   async getAllSales(): Promise<Sale[]> {
     return await db.sales.toArray();
+  },
+
+  async resetSales() {
+    await db.sales.clear()
   }
 };

@@ -1,7 +1,12 @@
+import { useSettings } from "../../hooks/useSettings";
 import { EarningsIcon } from "../../icons/Earnings";
+import { TrendingDownIcon } from "../../icons/TrendingDown";
+import { TrendingUpIcon } from "../../icons/TrendingUp";
 import type { Sale } from "../../types/types";
 
 export function Earning({ sales }: { sales: Sale[] }) {
+  const { settings } = useSettings()
+  const { separator } = settings
 
   function normalize(d: Date) {
     d.setHours(0, 0, 0, 0);
@@ -28,7 +33,7 @@ export function Earning({ sales }: { sales: Sale[] }) {
   // % DE CAMBIO REAL
   let percentageChange: number;
   if (totalYesterday === 0) {
-    percentageChange = totalToday > 0 ? Infinity : 0;
+    percentageChange = ((totalToday - totalYesterday) / 1) * 100;
   } else {
     percentageChange = ((totalToday - totalYesterday) / totalYesterday) * 100;
   }
@@ -45,7 +50,7 @@ export function Earning({ sales }: { sales: Sale[] }) {
             Ganancias del Día
           </p>
           <p className="text-text-primary-light dark:text-text-primary-dark text-3xl font-bold leading-tight tracking-tight">
-            ${totalToday.toLocaleString("es-AR")}
+            ${ separator === 'Punto (.)' ? totalToday.toLocaleString("es-AR") : totalToday.toLocaleString("en-US")}
           </p>
         </div>
 
@@ -54,15 +59,10 @@ export function Earning({ sales }: { sales: Sale[] }) {
         </div>
 
         <div className="flex items-center justify-center gap-1 mt-2">
-          {percentageChange === Infinity ? (
-            <p className="text-success text-sm font-medium leading-normal">
-              +∞% vs ayer
-            </p>
-          ) : (
-            <p className={`${color} text-sm font-medium leading-normal`}>
-              {percentageChange.toFixed(1).toLocaleString()}% vs ayer
-            </p>
-          )}
+          <p className={`${color} flex gap-2 text-sm font-medium leading-normal`}>
+            {color ? <TrendingUpIcon /> : <TrendingDownIcon />}
+            { separator === 'Punto (.)' ? percentageChange.toLocaleString('es-AR') : percentageChange.toLocaleString('en-US')}% vs ayer
+          </p>
         </div>
       </div>
 

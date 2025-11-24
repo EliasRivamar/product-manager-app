@@ -1,15 +1,6 @@
 import { useReducer, createContext, type ReactNode } from 'react'
 import { cartReducer, cartInitialState } from '../reducer/cart.ts'
-import { type CartState, type Producto } from '../types/types.js'
-
-type CartContextType = {
-  cart: CartState
-  addToCart: (product: Producto) => void
-  removeFromCart: (product: Producto) => void
-  clearCart: () => void
-  restQuantity: (product: Producto) => void
-  updateQuantity: (product: Producto, quantity: number) => void
-}
+import { type Producto, type CartContextType } from '../types/types.js'
 
 export const CartContext = createContext<CartContextType | undefined>(undefined)
 

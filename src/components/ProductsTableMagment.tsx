@@ -6,10 +6,14 @@ import { useScroll } from "../hooks/useScroll"
 import { useState } from "react"
 import { CartDelete } from "./Cards/CardDelete"
 import { CartEdit } from "./Cards/CardEdit"
+import { useSettings } from "../hooks/useSettings"
 
 
-export function ProductsTableMagment({ productos, setProductos, focusedPanel, setFocusedPanel, addProduct }: { productos: Producto[], setProductos: (p: Producto[]) => void, focusedPanel: "products" | "productsControl" | "cart", setFocusedPanel: (panel: "products" | "productsControl" | "cart") => void, addProduct: boolean }) {
+
+export function ProductsTableMagment({ productos, focusedPanel, setFocusedPanel, addProduct }: { productos: Producto[], focusedPanel: "products" | "productsControl" | "cart", setFocusedPanel: (panel: "products" | "productsControl" | "cart") => void, addProduct: boolean }) {
   const { cart, addToCart } = useCart()
+  const { settings } = useSettings()
+  const { separator } = settings 
   const [productToEdit, setProductToEdit] = useState<Producto | null>(null)
   const [productToDelete, setProductToDelete] = useState<Producto | null>(null)
   const { rowRefs, containerRef, selectedIndex, setSelectedIndex } = useScroll(
@@ -40,12 +44,12 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
     <div className={`min-w-full rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[520px] overflow-y-auto ${focusedPanel === "products" ? "ring-2 ring-primary" : ""}`} ref={containerRef}>
       {productToDelete && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <CartDelete producto={productToDelete} setProductos={setProductos} setProductToDelete={setProductToDelete} />
+          <CartDelete producto={productToDelete} setProductToDelete={setProductToDelete} />
         </div>
       )}
       {productToEdit && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <CartEdit productos={productos} producto={productToEdit} setProductos={setProductos} setProductToEdit={setProductToEdit} />
+          <CartEdit  producto={productToEdit} setProductToEdit={setProductToEdit} />
         </div>
       )}
       <table className="w-full">
@@ -79,7 +83,7 @@ export function ProductsTableMagment({ productos, setProductos, focusedPanel, se
                       <span className={`${producto.stock === 0 ? 'text-danger' : 'text-success'}`}>{producto.stock} unidades</span>
                     </div>
                   </td>
-                  <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${producto.price.toLocaleString("es-AR")}</td>
+                  <td className="px-8 py-2 whitespace-nowrap text-sm text-text-primary-light dark:text-text-primary-dark">${ separator === 'Punto (.)' ? producto.price.toLocaleString("es-AR") : producto.price.toLocaleString("en-US")}</td>
                   <td className="px-6 py-2 place-items-center justify-center">
                     <button
                       className={`bg-primary/20 rounded-lg text-text-primary-dark hover:bg-primary/30 text-sm hover:scale-105 duration-300 py-2 px-3 cursor-pointer`}

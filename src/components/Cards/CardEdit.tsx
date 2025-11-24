@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { productRepository } from "../../db/productRepository";
 import type { Producto } from "../../types/types";
 import { useToast } from "../../hooks/useToast";
+import { CustomSelect } from "../CustomSelect";
+import { useProduct } from "../../hooks/useProduct";
 
-export function CartEdit({ productos, producto, setProductos, setProductToEdit }: { productos: Producto[], producto: Producto, setProductos: (p: Producto[]) => void, setProductToEdit: (p: Producto | null) => void }) {
+export function CartEdit({ producto, setProductToEdit }: { producto: Producto, setProductToEdit: (p: Producto | null) => void }) {
+  const {productos, setProductos, updateProduct, getAll} = useProduct()
   const { showToast } = useToast()
   const [formValues, setFormValues] = useState({
     id: producto.id,
@@ -26,14 +28,14 @@ export function CartEdit({ productos, producto, setProductos, setProductToEdit }
       return
     }
 
-    await productRepository.update(formValues.id, {
+    await updateProduct(formValues.id, {
       name: formValues.name,
       price: Number(formValues.price),
       stock: Number(formValues.stock),
       category: formValues.category
     });
 
-    const nuevos = await productRepository.getAll();
+    const nuevos = await getAll();
     setProductos(nuevos);
     setProductToEdit(null);
     showToast(`Producto "${producto.name}" editado correctamente`, "success");
@@ -77,15 +79,13 @@ export function CartEdit({ productos, producto, setProductos, setProductToEdit }
             <label className='flex items-center text-text-secondary-light dark:text-text-secondary-dark text-base font-medium' htmlFor="product-category">
               Categoría
             </label>
-            <input
-              name="product-category"
-              type='text' required
+            <CustomSelect
               value={formValues.category}
-              placeholder={producto.category}
-              onChange={(e) =>
-                setFormValues({ ...formValues, category: e.target.value })
+              onChange={(value) =>
+                setFormValues({ ...formValues, category: value })
               }
-              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden border  border-bor-light dark:border-bor-dark rounded-lg text-text-primary-light dark:text-text-primary-dark focus:outline-0 focus:ring-0 bg-background-light dark:bg-background-dark h-full placeholder:text-text-secondary-light dark:placeholder:text-text-secondary-dark px-2 py-3 text-sm font-normal"></input>
+              options={Array.from(new Set(productos.map(p => p.category)))}
+            />
           </div>
           <div className="grid grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
