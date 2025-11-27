@@ -1,9 +1,9 @@
 import { Filters } from "../components/Filters";
 import { ProductsTableMagment } from "../components/ProductsTableMagment";
 import { SearchBar } from "../components/SearchBar";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFilters } from "../hooks/useFilters";
-import debounce from "just-debounce-it";
+
 
 import { AddProduct } from "../components/AddProduct";
 import { CartAdd } from "../components/Cards/CardAdd";
@@ -15,7 +15,7 @@ export function Managment() {
   const [searchValue, setSearchValue] = useState('')
   const [addProduct, setAddProduct] = useState<boolean>(false)
   const {filteredProducts } = useFilters(productos)
-  const [focusedPanel, setFocusedPanel] = useState<"productsControl">("productsControl");
+  const [focusedPanel, setFocusedPanel] = useState<"productsControl" | "products" | "cart">("productsControl");
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

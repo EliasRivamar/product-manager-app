@@ -18,7 +18,9 @@ createRoot(document.getElementById('root')!).render(
           <CartProvider>
             <ToastProvider>
               <BrowserRouter>
-                <App />
+                <StrictMode>
+                  <App />
+                </StrictMode>
               </BrowserRouter>
             </ToastProvider>
           </CartProvider>

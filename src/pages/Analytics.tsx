@@ -37,8 +37,8 @@ export function Analytics() {
           <div className="col-start-2 row-start-1 row-end-4">
             <Graph
               data={data}
-              month={months.find((m, index) => index === month)}
-              pastMonth={months.find((m, index) => index === month-1)}
+              month={months.find((_, index) => index === month)}
+              pastMonth={months.find((_, index) => index === month-1)}
             />
           </div>
         </main>
