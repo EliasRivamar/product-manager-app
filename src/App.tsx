@@ -58,10 +58,11 @@ function App() {
     <div className='h-screen w-screen bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark'>
       <Header>
       </Header>
-      {locked && (
+      {locked ? (
         <Password onSubmit={() => setLocked(false)} />
-      )}
+      ) :
       <AppRoutes />
+      }
     </div>
   );
 }

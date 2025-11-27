@@ -35,9 +35,11 @@ export function Filters() {
       </div>
       <hr className="border-bor-light dark:border-bor-dark" />
       <div>
-        {/* 
         <div className="flex flex-col gap-2">
-        <h3 className='font-semibold text-sm mb-3'>Categorias</h3>
+          <h3 className='font-semibold text-sm mb-3'>Categorias</h3>
+          
+        </div>
+        {/* 
           
           <label className="flex items-center gap-2">
             <Checkbox onChange={handleFilters} value={'categoria-2'}></Checkbox>
