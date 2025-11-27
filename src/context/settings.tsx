@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
-import { type SettingsState, type SettingsContextType } from '../types/types'
+import { type SettingsState, type SettingsContextType } from '../types/types.ts'
 
 
 export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);

@@ -39,15 +39,15 @@ export interface Carrito {
   total: number
 }
 
-interface FiltersState {
+export interface FiltersState {
   stock: 'all' | 'yes-stock' | 'no-stock'
 }
 
-interface FiltersContextType {
+export interface FiltersContextType {
   filters: FiltersState
   setFilters: React.Dispatch<React.SetStateAction<FiltersState>>
 }
-interface SaleContextType {
+export interface SaleContextType {
   sales: Sale[]
   addSale: (s: Sale) => void
   setSales: React.Dispatch<React.SetStateAction<Sale[]>>
@@ -69,7 +69,7 @@ export type CartContextType = {
   updateQuantity: (product: Producto, quantity: number) => void
 }
 
-type CustomTooltipProps = {
+export type CustomTooltipProps = {
   active?: boolean;
   payload?: {
     [x: string]: { total: any; ventas: any }

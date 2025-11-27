@@ -1,5 +1,5 @@
 import { XAxis, YAxis, Tooltip, Area, AreaChart } from "recharts";
-import type { CustomTooltipProps } from "../../types/types";
+import type { CustomTooltipProps } from "../../types/types.ts";
 import { useSale } from "../../hooks/useSale";
 import { TrendingUpIcon } from "../../icons/TrendingUp";
 import { TrendingDownIcon } from "../../icons/TrendingDown";

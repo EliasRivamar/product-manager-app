@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { productRepository } from "../db/productRepository";
-import { type ProductContextType, type Producto } from "../types/types";
+import { type ProductContextType, type Producto } from "../types/types.ts";
 import { initDatabase } from "../db/init";
 
 export const ProductsContext = createContext<ProductContextType | undefined>(undefined);

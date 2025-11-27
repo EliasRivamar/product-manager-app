@@ -2,7 +2,7 @@ import { useSettings } from "../../hooks/useSettings";
 import { SalesIcon } from "../../icons/Sales";
 import { TrendingDownIcon } from "../../icons/TrendingDown";
 import { TrendingUpIcon } from "../../icons/TrendingUp";
-import type { Sale } from "../../types/types";
+import type { Sale } from "../../types/types.ts";
 
 export function Sales({ sales }: { sales: Sale[] }) {
   const { settings } = useSettings()

@@ -1,5 +1,5 @@
 import { createContext, useState, type ReactNode } from 'react'
-import { type FiltersState, type FiltersContextType } from '../types/types'
+import { type FiltersState, type FiltersContextType } from '../types/types.ts'
 
 export const FiltersContext = createContext<FiltersContextType | undefined>(undefined)
 
