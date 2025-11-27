@@ -25,7 +25,6 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     return saved ? JSON.parse(saved) : defaultSettings;
   });
 
-  // 🔥 Guardar automáticamente cada vez que cambien
   useEffect(() => {
     localStorage.setItem("app-settings", JSON.stringify(settings));
   }, [settings]);

@@ -13,7 +13,7 @@ import { useSettings } from "../../hooks/useSettings"
 export function Cart({ focusedPanel, setFocusedPanel }: { focusedPanel: "products" | "cart", setFocusedPanel: (panel: "products" | "cart") => void}) {
   const { cart, clearCart, addToCart, removeFromCart, restQuantity } = useCart()
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const {productos, setProductos, updateProduct, getAll} = useProduct()
+  const { setProductos, updateProduct, getAll} = useProduct()
   const {settings} = useSettings()
   const { showToast } = useToast()
   const { addSale } = useSale()
@@ -25,8 +25,8 @@ export function Cart({ focusedPanel, setFocusedPanel }: { focusedPanel: "product
     0
   )
 
-  const rowRefs = useRef<(HTMLTableRowElement | undefined)[]>([])
-  const containerCart = useRef<HTMLDivElement | undefined>(null)
+  const rowRefs = useRef<(HTMLLIElement | null)[]>([])
+  const containerCart = useRef<HTMLDivElement | null>(null)
 
 
 
@@ -134,7 +134,7 @@ export function Cart({ focusedPanel, setFocusedPanel }: { focusedPanel: "product
           cart.map((item, index) => {
             const isSelected = index === selectedIndex
             return <li key={item.producto.id} className={`flex flex-col list-items gap-2 ${isSelected ? 'bg-background-light dark:bg-background-dark' : ''}`}
-              ref={(el) => rowRefs.current[index] = el}>
+              ref={el => { rowRefs.current[index] = el; }}>
               <div className='flex items-center gap-4'>
                 <div className='flex-1'>
                   <p className='font-semibold text-sm'>{item.producto.name}</p>

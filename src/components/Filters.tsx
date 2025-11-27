@@ -1,5 +1,4 @@
 import { useFilters } from "../hooks/useFilters";
-import type { Producto } from "../types/types";
 import { Checkbox } from "./CheckBox";
 
 

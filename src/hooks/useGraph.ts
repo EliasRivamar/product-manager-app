@@ -1,5 +1,5 @@
 // hooks/useSalesGraph.js
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import type { Sale } from "../types/types";
 
 function getDaysInMonth(month: number, year: number) {

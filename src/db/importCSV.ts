@@ -24,7 +24,7 @@ export async function importCSV(csvText: string) {
       price: Number(row.price),
     }));
 
-  // 💥 LIMPIA LA TABLA ANTES DE INSERTAR
+
   await db.products.clear();
 
   await productRepository.bulkInsert(products);

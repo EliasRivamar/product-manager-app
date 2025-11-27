@@ -71,7 +71,9 @@ export type CartContextType = {
 
 type CustomTooltipProps = {
   active?: boolean;
-  payload?: { total: number, ventas: number,}[];
+  payload?: {
+    [x: string]: { total: any; ventas: any }
+}[];
   label?: string | number;
   separator?: 'Coma (,)' | 'Punto (.)';
 };

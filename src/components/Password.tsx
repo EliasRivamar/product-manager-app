@@ -2,7 +2,11 @@ import { useState } from "react";
 import { useSettings } from "../hooks/useSettings";
 import { useToast } from "../hooks/useToast";
 
-export function Password({ onSubmit }) {
+type PasswordProps = {
+  onSubmit: () => void;
+};
+
+export function Password({ onSubmit }: PasswordProps) {
   const [value, setValue] = useState("");
   const { settings } = useSettings()
   const { passwordValue } = settings

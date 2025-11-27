@@ -14,7 +14,7 @@ export function ProductsTable({ productos, focusedPanel, setFocusedPanel }: { pr
 
   
   return (
-    <div className={` min-w-[60%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[530px] overflow-y-auto ${focusedPanel === "products" ? "ring-2 ring-primary" : ""}`} ref={containerRef}>
+    <div className={` min-w-[60%] rounded-xl border border-bor-light dark:border-bor-dark bg-surface-light dark:bg-surface-dark max-h-[530px] overflow-y-auto ${focusedPanel === "products" ? "ring-2 ring-primary" : ""}`} ref={containerRef as React.RefObject<HTMLDivElement>}>
       <table className="w-full">
         <thead className="bg-surface-light dark:bg-surface-dark sticky top-0">
           <tr>
@@ -32,7 +32,7 @@ export function ProductsTable({ productos, focusedPanel, setFocusedPanel }: { pr
               const inCart = cart.some(item => item.producto.id === producto.id)
               return (
                 <tr key={producto.id}
-                  ref={(el) => rowRefs.current[index] = el}
+                  ref={(el) => {if (el) rowRefs.current[index] = el;}}
                   onMouseDown={() => setSelectedIndex(index)}
                   onContextMenu={(e) => {
                     e.preventDefault()
@@ -53,7 +53,7 @@ export function ProductsTable({ productos, focusedPanel, setFocusedPanel }: { pr
                       disabled={producto.stock === 0 || inCart}
                       className={`bg-primary/20 rounded-lg text-text-primary-dark hover:bg-primary/30 text-sm hover:scale-105 duration-300 py-2 px-3 ${producto.stock === 0 || cart.some(item => item.producto.id === producto.id) ? 'opacity-10' : 'opacity-100 cursor-pointer'}`}
                       onClick={() => addToCart(producto)}>
-                      <span><AddToCartIcon /></span>
+                      <span><AddToCartIcon className={'stroke-primary'} /></span>
                     </button>
                   </td>
                 </tr>

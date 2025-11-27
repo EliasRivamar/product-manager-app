@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CurrencyIcon } from "../../icons/Currency";
 import { CustomSelect } from "../CustomSelect";
 import { useSettings } from "../../hooks/useSettings";
